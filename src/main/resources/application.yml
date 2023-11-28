@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      username: divyansh
+      password: divyansh
+      host: localhost
+      port: 27017
+      database: chess_engine
+      authentication-database: admin
+
+server:
+  port: 8088
