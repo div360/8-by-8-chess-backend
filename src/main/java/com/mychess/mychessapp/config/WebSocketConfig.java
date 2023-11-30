@@ -6,7 +6,6 @@ import org.springframework.messaging.converter.DefaultContentTypeResolver;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.config.annotation.*;
 
 import java.util.List;
@@ -19,15 +18,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/user");
-        registry.setUserDestinationPrefix(("/user"));
+        registry.setUserDestinationPrefix("/user");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry)
     {
-        registry.addEndpoint("/ws").withSockJS();
+        registry.addEndpoint("/stomp-endpoint").setAllowedOrigins("http://localhost:3000").withSockJS();
     }
 
     @Override
@@ -38,6 +37,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         converter.setObjectMapper(new ObjectMapper());
         converter.setContentTypeResolver(resolver);
         messageConverters.add(converter);
-        return false;
+        return true;
     }
 }
