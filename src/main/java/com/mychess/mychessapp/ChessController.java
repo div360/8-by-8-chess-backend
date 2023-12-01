@@ -16,9 +16,4 @@ public class ChessController {
     private final ChessMessageService chessMessageService;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    @MessageMapping("/chess")
-    public void sendChessMessage(@Payload ChessMessage chessMessage) {
-        var savedChessMessage = chessMessageService.saveChessMessage(chessMessage);
-        simpMessagingTemplate.convertAndSendToUser(chessMessage.getReceiverId(),"/queue/messages",savedChessMessage);
-    }
 }

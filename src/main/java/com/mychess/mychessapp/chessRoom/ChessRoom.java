@@ -1,5 +1,6 @@
 package com.mychess.mychessapp.chessRoom;
 
+import com.mychess.mychessapp.player.Player;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,11 +16,4 @@ public class ChessRoom {
     private String roomId;
     private Player player1;
     private Player player2;
-}
-
-class Player {
-    private String id;
-    private String name;
-    private String color;
-    private String link;
 }
