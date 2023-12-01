@@ -22,7 +22,11 @@ public class ChessRoomService {
 
         do {
             player2.setId(UUID.randomUUID().toString());
-        } while (player1.getId() == player2.getId());
+        } while (player1.getId().equals(player2.getId()));
+
+        String player1Color = player1.getColor();
+        String player2Color = player1Color.equals("white") ? "black" : "white";
+        player2.setColor(player2Color);
 
         var chessRoom = ChessRoom.builder()
                 .roomId(roomId)
