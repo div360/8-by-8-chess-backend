@@ -4,6 +4,8 @@ import com.mychess.mychessapp.player.Player;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,5 +37,22 @@ public class ChessRoomService {
                 .build();
         chessRoomRepository.save(chessRoom);
         return chessRoom;
+    }
+
+    public boolean checkIfRoomExists(String roomId){
+        return chessRoomRepository.findByRoomId(roomId).isPresent();
+    }
+
+    public void updatePlayerName(String roomId, String playerId, String name){
+        Optional<ChessRoom> optionalChessRoom = chessRoomRepository.findByRoomId(roomId);
+
+        optionalChessRoom.ifPresent(chessRoom -> {
+            if (chessRoom.getPlayer1().getId().equals(playerId)) {
+                chessRoom.getPlayer1().setName(name);
+            } else {
+                chessRoom.getPlayer2().setName(name);
+            }
+            chessRoomRepository.save(chessRoom);
+        });
     }
 }

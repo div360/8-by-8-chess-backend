@@ -29,4 +29,20 @@ public class ChessRoomController {
         response.put("player2Id", player2Id);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/api/join")
+    public ResponseEntity<Map<String, String>> joinChessRoom(@RequestBody Map<String, String> request) {
+        if(!chessRoomService.checkIfRoomExists(request.get("roomId"))){
+            return ResponseEntity.badRequest().build();
+        }
+        var roomId = request.get("roomId");
+        var playerId = request.get("playerId");
+        if(request.containsKey("name")){
+            chessRoomService.updatePlayerName(roomId, playerId, request.get("name"));
+        }
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "Joined room successfully");
+        return ResponseEntity.ok(response);
+    }
 }
