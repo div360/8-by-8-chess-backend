@@ -9,10 +9,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document
+@Document(collection = "chessRoom")
 public class ChessRoom {
     @Id
     private String roomId;
-    private String senderId;
-    private String receiverId;
+    private Player player1;
+    private Player player2;
+}
+
+class Player {
+    private String id;
+    private String name;
+    private String color;
+    private String link;
 }
