@@ -4,6 +4,7 @@ import com.mychess.mychessapp.player.Player;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,8 +44,9 @@ public class ChessRoomService {
         return chessRoomRepository.findByRoomId(roomId).isPresent();
     }
 
-    public void updatePlayerName(String roomId, String playerId, String name){
+    public HashMap<String, String> updatePlayerName(String roomId, String playerId, String name){
         Optional<ChessRoom> optionalChessRoom = chessRoomRepository.findByRoomId(roomId);
+        HashMap<String, String> response = new HashMap<>();
 
         optionalChessRoom.ifPresent(chessRoom -> {
             if (chessRoom.getPlayer1().getId().equals(playerId)) {
@@ -53,6 +55,15 @@ public class ChessRoomService {
                 chessRoom.getPlayer2().setName(name);
             }
             chessRoomRepository.save(chessRoom);
+            response.put("roomId", chessRoom.getRoomId());
+            response.put("selfId", playerId);
+            response.put("opponentId", chessRoom.getPlayer1().getId().equals(playerId)
+                    ?
+                    chessRoom.getPlayer2().getId()
+                    :
+                    chessRoom.getPlayer1().getId());
         });
+
+        return response;
     }
 }

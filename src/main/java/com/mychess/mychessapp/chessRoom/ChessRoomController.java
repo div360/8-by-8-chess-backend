@@ -35,12 +35,14 @@ public class ChessRoomController {
         if(!chessRoomService.checkIfRoomExists(request.get("roomId"))){
             return ResponseEntity.badRequest().build();
         }
+        Map<String, String> response = new HashMap<>();
+
         var roomId = request.get("roomId");
         var playerId = request.get("playerId");
         if(request.containsKey("name")){
-            chessRoomService.updatePlayerName(roomId, playerId, request.get("name"));
+            response = chessRoomService.updatePlayerName(roomId, playerId, request.get("name"));
         }
-        Map<String, String> response = new HashMap<>();
+
         response.put("status", "success");
         response.put("message", "Joined room successfully");
         return ResponseEntity.ok(response);
