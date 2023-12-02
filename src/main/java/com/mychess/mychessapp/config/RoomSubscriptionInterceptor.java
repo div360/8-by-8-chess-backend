@@ -1,7 +1,6 @@
 package com.mychess.mychessapp.config;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.ChannelInterceptor;
@@ -17,15 +16,12 @@ public class RoomSubscriptionInterceptor implements ChannelInterceptor {
         String destination  = headerAccessor.getDestination();
 
         if(destination == null) {
-            System.out.println("Destination is null");
             return message;
         }
         if(!destination.contains("/topic")){
-            System.out.println("Destination is not a topic");
             return message;
         }
 
-        System.out.println("Destination: " + destination);
         String roomId = "";
         try {
             roomId = destination.substring(destination.lastIndexOf('/') + 1);
@@ -33,19 +29,11 @@ public class RoomSubscriptionInterceptor implements ChannelInterceptor {
             System.out.println("Room id not found");
         }
 
-        System.out.println("Room id: " + roomId);
-
         int clientsInRoom = WebSocketEventListener.getNumberOfClients(roomId);
 
-        System.out.println("Number of clients in room: " + clientsInRoom);
-
         if(clientsInRoom >= 2) {
-            System.out.println("Room is full");
             return null;
         }
-
-        System.out.println("Room is not full");
-
         return message;
     }
 }
