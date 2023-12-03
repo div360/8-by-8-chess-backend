@@ -23,10 +23,12 @@ public class ChessRoomController {
         var roomId = chessRoom.getRoomId();
         var player1Id = chessRoom.getPlayer1().getId();
         var player2Id = chessRoom.getPlayer2().getId();
+        var player1Color = chessRoom.getPlayer1().getColor();
         Map<String, String> response = new HashMap<>();
         response.put("roomId", roomId);
         response.put("player1Id", player1Id);
         response.put("player2Id", player2Id);
+        response.put("player1Color", player1Color);
         return ResponseEntity.ok(response);
     }
 
@@ -39,12 +41,13 @@ public class ChessRoomController {
 
         var roomId = request.get("roomId");
         var playerId = request.get("playerId");
+        var color = chessRoomService.getColor(roomId, playerId);
         if(request.containsKey("name")){
             response = chessRoomService.updatePlayerName(roomId, playerId, request.get("name"));
         }
-
         response.put("status", "success");
         response.put("message", "Joined room successfully");
+        response.put("player2Color", color);
         return ResponseEntity.ok(response);
     }
 }

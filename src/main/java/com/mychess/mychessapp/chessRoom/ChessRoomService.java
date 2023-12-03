@@ -44,6 +44,21 @@ public class ChessRoomService {
         return chessRoomRepository.findByRoomId(roomId).isPresent();
     }
 
+    public String getColor(String roomId, String playerId){
+        Optional<ChessRoom> optionalChessRoom = chessRoomRepository.findByRoomId(roomId);
+        if(optionalChessRoom.isEmpty()){
+            throw new NoSuchElementException();
+        }
+        ChessRoom chessRoom = optionalChessRoom.get();
+        if(chessRoom.getPlayer1().getId().equals(playerId)){
+            return chessRoom.getPlayer1().getColor();
+        } else if(chessRoom.getPlayer2().getId().equals(playerId)){
+            return chessRoom.getPlayer2().getColor();
+        } else {
+            throw new NoSuchElementException();
+        }
+    }
+
     public HashMap<String, String> updatePlayerName(String roomId, String playerId, String name){
         Optional<ChessRoom> optionalChessRoom = chessRoomRepository.findByRoomId(roomId);
         HashMap<String, String> response = new HashMap<>();
