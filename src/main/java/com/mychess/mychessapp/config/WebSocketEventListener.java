@@ -58,13 +58,15 @@ public class WebSocketEventListener {
             System.out.println("Room id not found");
         }
 
+        assert sessionId != null;
         if (roomClients.containsKey(roomId)) {
-            assert sessionId != null;
+            if(sessionRoomMap.containsKey(sessionId)){
+                return;
+            }
             sessionRoomMap.put(sessionId, roomId);
             roomClients.put(roomId, roomClients.get(roomId) + 1);
             if(roomClients.get(roomId) == 2) chessMessageService.sendGameStart(roomId);
         } else {
-            assert sessionId != null;
             sessionRoomMap.put(sessionId, roomId);
             roomClients.put(roomId, 1);
         }
