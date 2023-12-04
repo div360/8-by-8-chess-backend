@@ -40,13 +40,14 @@ public class ChessController {
         response.put("from", chessMessage.getMessage().get("from"));
         response.put("to", chessMessage.getMessage().get("to"));
         response.put("fen_string", chessMessage.getMessage().get("fenString"));
+        var senderId = chessMessage.getSenderId();
 
         System.out.println("Move in room " + roomId + ": " + response);
 
         var newChessMessage = ChessMessage.builder()
                 .code(200)
                 .roomId(roomId)
-                .senderId("server")
+                .senderId(senderId)
                 .message(response)
                 .build();
 
