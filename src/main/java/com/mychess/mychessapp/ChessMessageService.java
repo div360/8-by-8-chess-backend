@@ -15,8 +15,9 @@ public class ChessMessageService {
 
     public void sendGameStart(String roomId) {
         HashMap<String, String> response = new HashMap<>();
-        response.put("message", "start");
+        response.put("message", "Start Game");
         var chessMessage = ChessMessage.builder()
+                .code(100)
                 .roomId(roomId)
                 .message(response)
                 .build();

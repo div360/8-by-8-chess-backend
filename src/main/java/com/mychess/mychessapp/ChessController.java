@@ -26,20 +26,7 @@ public class ChessController {
         response.put("message", "Subscribed to room " + roomId + " successfully");
 
         var chessMessage = ChessMessage.builder()
-                .roomId(roomId)
-                .message(response)
-                .build();
-
-        simpMessagingTemplate.convertAndSend("/topic/" + roomId, chessMessage);
-    }
-
-    @MessageMapping("/send/{roomId}")
-    public void sendMessage(Principal principal, @DestinationVariable String roomId) {
-        var message = "Sent to room " + roomId + " successfully";
-        HashMap<String, String> response = new HashMap<>();
-        response.put("message", message);
-
-        var chessMessage = ChessMessage.builder()
+                .code(300)
                 .roomId(roomId)
                 .message(response)
                 .build();
@@ -49,6 +36,20 @@ public class ChessController {
 
     @MessageMapping("/move/{roomId}")
     public void sendMove(Principal principal, @DestinationVariable String roomId, @Payload ChessMessage chessMessage) {
+        HashMap<String, String> response = new HashMap<>();
+        response.put("from", chessMessage.getMessage().get("from"));
+        response.put("to", chessMessage.getMessage().get("to"));
+        response.put("fen_string", chessMessage.getMessage().get("fenString"));
+
+        System.out.println("Move in room " + roomId + ": " + response);
+
+        var newChessMessage = ChessMessage.builder()
+                .code(200)
+                .roomId(roomId)
+                .senderId("server")
+                .message(response)
+                .build();
+
         simpMessagingTemplate.convertAndSend("/topic/" + roomId, chessMessage);
     }
 }
