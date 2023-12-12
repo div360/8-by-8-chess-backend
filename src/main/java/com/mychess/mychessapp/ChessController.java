@@ -42,8 +42,6 @@ public class ChessController {
         response.put("fen_string", chessMessage.getMessage().get("fenString"));
         var senderId = chessMessage.getSenderId();
 
-        System.out.println("Move in room " + roomId + ": " + response);
-
         var newChessMessage = ChessMessage.builder()
                 .code(200)
                 .roomId(roomId)
@@ -52,5 +50,40 @@ public class ChessController {
                 .build();
 
         simpMessagingTemplate.convertAndSend("/topic/" + roomId, chessMessage);
+    }
+
+    @MessageMapping("/chat/{roomId}")
+    public void sendMessage(Principal principal, @DestinationVariable String roomId, @Payload ChessMessage chessMessage) {
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", chessMessage.getMessage().get("message"));
+        var senderId = chessMessage.getSenderId();
+
+        var newChessMessage = ChessMessage.builder()
+                .code(600)
+                .roomId(roomId)
+                .senderId(senderId)
+                .message(response)
+                .build();
+
+        simpMessagingTemplate.convertAndSend("/topic/" + roomId, chessMessage);
+    }
+
+    @MessageMapping("/videoChat/{roomId}")
+    public void sendVideoCall(Principal principal, @DestinationVariable String roomId, @Payload ChessMessage chessMessage) {
+
+        HashMap<String, Object> response = new HashMap<>();
+
+        response.put("type", chessMessage.getVideoMessage().get("type"));
+        response.put("data", chessMessage.getVideoMessage().get("data"));
+        var senderId = chessMessage.getSenderId();
+
+        var newChessMessage = ChessMessage.builder()
+                .code(500)
+                .roomId(roomId)
+                .senderId(senderId)
+                .videoMessage(response)
+                .build();
+
+        simpMessagingTemplate.convertAndSend("/topic/" + roomId, newChessMessage);
     }
 }

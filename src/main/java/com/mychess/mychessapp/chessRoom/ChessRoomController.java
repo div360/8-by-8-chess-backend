@@ -4,9 +4,7 @@ import com.mychess.mychessapp.player.Player;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,5 +47,18 @@ public class ChessRoomController {
         response.put("message", "Joined room successfully");
         response.put("player2Color", color);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/checkroom/{roomId}")
+    public ResponseEntity<Map<String, String>> checkIfRoomExists(@PathVariable String roomId){
+        Map<String, String> response = new HashMap<>();
+        if(chessRoomService.checkIfRoomExists(roomId)){
+            response.put("status", "success");
+            response.put("message", "Room exists");
+            return ResponseEntity.ok(response);
+        }
+        response.put("status", "error");
+        response.put("message", "Room does not exist");
+        return ResponseEntity.badRequest().body(response);
     }
 }

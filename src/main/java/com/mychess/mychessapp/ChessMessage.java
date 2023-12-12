@@ -16,6 +16,7 @@ public class ChessMessage {
     private String roomId;
     private String senderId;
     private HashMap<String, String> message;
+    private HashMap<String, Object> videoMessage;
     private Date timestamp;
 }
 
