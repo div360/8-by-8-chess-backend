@@ -1,13 +1,11 @@
 package com.mychess.mychessapp.chessRoom;
 
+import com.mychess.mychessapp.chessData.ChessData;
 import com.mychess.mychessapp.player.Player;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -81,4 +79,26 @@ public class ChessRoomService {
 
         return response;
     }
+
+    public boolean updateChessData(String roomId, ChessData chessData) {
+        Optional<ChessRoom> optionalChessRoom = chessRoomRepository.findByRoomId(roomId);
+        if (optionalChessRoom.isPresent()) {
+            ChessRoom chessRoom = optionalChessRoom.get();
+            chessRoom.setChessData(chessData);
+            chessRoomRepository.save(chessRoom);
+            return true;
+        }
+        return false;
+    }
+
+
+    public ChessRoom getChessData(String roomId){
+        Optional<ChessRoom> optionalChessRoom = chessRoomRepository.findByRoomId(roomId);
+        if(optionalChessRoom.isEmpty()){
+            throw new NoSuchElementException();
+        }
+        ChessRoom chessRoom = optionalChessRoom.get();
+        return chessRoom;
+    }
+
 }

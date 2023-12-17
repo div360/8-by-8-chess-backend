@@ -1,5 +1,6 @@
 package com.mychess.mychessapp.chessRoom;
 
+import com.mychess.mychessapp.chessData.ChessData;
 import com.mychess.mychessapp.player.Player;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -61,4 +62,26 @@ public class ChessRoomController {
         response.put("message", "Room does not exist");
         return ResponseEntity.badRequest().body(response);
     }
+
+    @PostMapping("/api/updateChessData")
+    private ResponseEntity<Map<String, String>> updateChessData(@RequestBody ChessRoom request){
+        Map<String, String> response = new HashMap<>();
+        String roomId = request.getRoomId();
+        ChessData chessData = request.getChessData();
+        if(chessRoomService.updateChessData(roomId, chessData)){
+            response.put("status", "success");
+            response.put("message", "Chess data updated successfully");
+            return ResponseEntity.ok(response);
+        }
+        response.put("status", "error");
+        response.put("message", "Chess data could not be updated");
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @GetMapping("/api/getChessData/{roomId}")
+    public ResponseEntity<ChessRoom> getRoomData(@PathVariable String roomId){
+        ChessRoom chessRoom = chessRoomService.getChessData(roomId);
+        return ResponseEntity.ok().body(chessRoom);
+    }
+
 }

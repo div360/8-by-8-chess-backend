@@ -39,7 +39,6 @@ public class ChessController {
         HashMap<String, String> response = new HashMap<>();
         response.put("from", chessMessage.getMessage().get("from"));
         response.put("to", chessMessage.getMessage().get("to"));
-        response.put("fen_string", chessMessage.getMessage().get("fenString"));
         var senderId = chessMessage.getSenderId();
 
         var newChessMessage = ChessMessage.builder()
@@ -85,5 +84,21 @@ public class ChessController {
                 .build();
 
         simpMessagingTemplate.convertAndSend("/topic/" + roomId, newChessMessage);
+    }
+
+    @MessageMapping("/nameExchange/{roomId}")
+    public void sendName(Principal principal, @DestinationVariable String roomId, @Payload ChessMessage chessMessage) {
+        HashMap<String, String> response = new HashMap<>();
+        response.put("name", chessMessage.getMessage().get("name"));
+        var senderId = chessMessage.getSenderId();
+
+        var newChessMessage = ChessMessage.builder()
+                .code(700)
+                .roomId(roomId)
+                .senderId(senderId)
+                .message(response)
+                .build();
+
+        simpMessagingTemplate.convertAndSend("/topic/" + roomId, chessMessage);
     }
 }

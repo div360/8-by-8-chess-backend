@@ -1,5 +1,6 @@
 package com.mychess.mychessapp.chessRoom;
 
+import com.mychess.mychessapp.chessData.ChessData;
 import com.mychess.mychessapp.player.Player;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
@@ -20,4 +21,5 @@ public class ChessRoom {
     private String roomId;
     private Player player1;
     private Player player2;
+    private ChessData chessData;
 }
